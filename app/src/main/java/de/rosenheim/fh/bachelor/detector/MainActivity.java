@@ -15,7 +15,7 @@ import java.util.List;
 import de.rosenheim.fh.bachelor.camera.CameraPreview;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity{
 
     //Local variables
     private final int PREVIEW_AND_PICTURE_ROTATION = 90;
@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.sapui5_layout);
 
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -173,7 +173,7 @@ public class MainActivity extends ActionBarActivity {
         return optimalSize;
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -193,5 +193,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

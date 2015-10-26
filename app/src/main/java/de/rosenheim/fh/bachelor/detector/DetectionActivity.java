@@ -6,8 +6,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.List;
 import de.rosenheim.fh.bachelor.camera.CameraPreview;
 
 
-public class MainActivity extends ActionBarActivity{
+public class DetectionActivity extends ActionBarActivity{
 
     //Local variables
     private final int PREVIEW_AND_PICTURE_ROTATION = 90;
@@ -27,7 +25,7 @@ public class MainActivity extends ActionBarActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sapui5_layout);
+        setContentView(R.layout.detection_layout);
 
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

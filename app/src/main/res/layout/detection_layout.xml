@@ -50,13 +50,13 @@
     	android:stretchColumns="1">
     	
       	<ImageButton
-			android:id="@+id/code_scan_button"
+			android:id="@+id/match_scan_button"
 			android:layout_width="0dip"
          	android:layout_height="match_parent"
          	android:layout_marginRight="2.5dp"
          	android:layout_marginEnd="2.5dp"
          	android:layout_weight="1"
-       		android:src="@drawable/code_icon_selector"
+       		android:src="@drawable/match_icon_selector"
 			android:scaleType="fitXY"
 			android:onClick="codeScanAction"
 			android:background="@null"/>

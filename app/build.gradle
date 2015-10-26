@@ -22,4 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
+    compile files('libs/opencv library - 2.4.9.jar')
+    compile files('libs/android-logging-log4j-1.0.3.jar')
 }

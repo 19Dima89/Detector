@@ -58,7 +58,7 @@
          	android:layout_weight="1"
        		android:src="@drawable/match_icon_selector"
 			android:scaleType="fitXY"
-			android:onClick="codeScanAction"
+			android:onClick="matchAction"
 			android:background="@null"/>
       	
       	<ImageButton
@@ -70,7 +70,7 @@
          	android:layout_weight="1"
        		android:src="@drawable/cam_icon_selector"
 			android:scaleType="fitXY"
-			android:onClick="matchAction"
+			android:onClick="captureAction"
 			android:background="@null"/>
 
     </TableRow>

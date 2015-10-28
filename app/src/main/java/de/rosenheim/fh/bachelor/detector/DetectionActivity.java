@@ -4,37 +4,156 @@ import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import de.rosenheim.fh.bachelor.camera.CameraPreview;
+import de.rosenheim.fh.bachelor.types.ScanObject;
 
 
 public class DetectionActivity extends ActionBarActivity{
 
     //Local variables
+    public static final int MATCHER_THREAD = 30989;
+    public static final int CAPTURE_THREAD = 98903;
     private final int PREVIEW_AND_PICTURE_ROTATION = 90;
+    private final String TAG = "de.rosenheim.fh.tag";
     private Camera mCamera = null;
     private CameraPreview mPreview = null;
     private CameraHandlerThread cameraThread = null;
     private RelativeLayout previewFrame = null;
+    private TextView detectionResult = null;
+    private List<ScanObject> comparisonObjects = null;
+
+    //Needed to side load the OpenCV Manager on startup
+    private BaseLoaderCallback mOpenCVCallBack = new BaseLoaderCallback(this) {
+
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status)
+            {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    Log.i(TAG, "OpenCV loaded successfully");
+
+                } break;
+                default:
+                {
+                    super.onManagerConnected(status);
+                } break;
+            }
+        }
+    };
+
+    //Handles transactions with the various side threads
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg)
+        {
+            super.handleMessage(msg);
+
+            if(msg.what == MATCHER_THREAD)//Handles messages from the MatcherThread
+            {
+                handleMatcherThread(msg);
+            }
+            else if(msg.what == CAPTURE_THREAD)
+            {
+                handleCaptureThread(msg);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Side loading the OpenCV Manager to integrate the OpenCV library
+        Log.i(TAG, "Trying to load OpenCV library");
+
+        if (!OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, this, mOpenCVCallBack))
+        {
+            Log.e(TAG, "Cannot connect to OpenCV Manager");
+        }
+        else
+        {
+            Log.i(TAG, "opencv successfull");
+            System.out.println(java.lang.Runtime.getRuntime().maxMemory());
+        }
+
         setContentView(R.layout.detection_layout);
 
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Getting the layout in which the camera preview will be stored
         previewFrame = (RelativeLayout) findViewById(R.id.preview_container);
+        detectionResult = (TextView) findViewById(R.id.detection_result);
+
+        //Initiating comparisonObjects
+        comparisonObjects = new ArrayList<ScanObject>();
 
         setUpCamera();
 
     }
+
+    public void matchAction(View view)
+    {
+        new MatcherThread(mPreview, mHandler, comparisonObjects).start();
+    }
+
+    public void captureAction(View view)
+    {
+        new CaptureThread(mPreview, mHandler, comparisonObjects).start();
+    }
+
+    private void handleMatcherThread(Message msg)
+    {
+        if(msg.obj==null)
+        {
+            detectionResult.setText("Nothing detected");
+            return;
+        }
+
+        int index = (Integer)msg.obj;
+
+        if(index == -1)
+        {
+            detectionResult.setText("Nothing detected");
+            return;
+        }
+
+        detectionResult.setText(comparisonObjects.get(index).getObjectName());
+    }
+
+    private void handleCaptureThread(Message msg)
+    {
+        if(msg.obj==null)
+        {
+            detectionResult.setText("Nothing captured");
+            return;
+        }
+
+        boolean index = (boolean)msg.obj;
+
+        if(index)
+        {
+            detectionResult.setText("Object captured");
+        }
+    }
+
+
 
     private void setUpCamera()
     {

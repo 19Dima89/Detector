@@ -22,7 +22,9 @@ import java.util.List;
 import de.rosenheim.fh.bachelor.camera.CameraPreview;
 import de.rosenheim.fh.bachelor.types.ScanObject;
 
-
+/**
+ * Created by Dima-Desktop on 25.10.2015
+ */
 public class DetectionActivity extends ActionBarActivity{
 
     //Local variables

@@ -28,6 +28,7 @@ public class MatcherThread extends Thread {
     private List<ScanObject> comparisonObjects = null;
     private Bitmap fetchedFrame = null;
 
+    //Constructor
     public MatcherThread(CameraPreview preview, Handler mHandler, List<ScanObject> comparisonObjects)
     {
         this.preview = preview;
@@ -35,6 +36,7 @@ public class MatcherThread extends Thread {
         this.comparisonObjects = comparisonObjects;
     }
 
+    //Gets a frame from the CameraPreview and compares the frame to all the saved frames in comparisonObjects
     public void run()
     {
         fetchedFrame = UtilityClass.fetchRawFrameData(this.preview.getRawPreviewData(), this.preview.getCamera().getParameters().getPreviewSize());

@@ -22,8 +22,10 @@ import android.os.Environment;
  */
 public final class UtilityClass {
 
+    //Local variables
     private static final int DIST_LIMIT = 30;
 
+    //Constructor
     private UtilityClass()
     {
         //Private constructor so that the class can not be instantiated

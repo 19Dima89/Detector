@@ -18,6 +18,7 @@ public class CaptureThread extends Thread{
     private Handler mHandler = null;
     private List<ScanObject> comparisonObjects = null;
 
+    //Constructor
     public CaptureThread(CameraPreview preview, Handler mHandler, List<ScanObject> comparisonObjects)
     {
         this.preview = preview;
@@ -25,6 +26,7 @@ public class CaptureThread extends Thread{
         this.comparisonObjects = comparisonObjects;
     }
 
+    //Receiving a Frame from the camera and saving it in comparisonObjects
     @Override
     public void run()
     {

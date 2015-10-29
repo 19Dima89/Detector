@@ -11,12 +11,14 @@ public class ScanObject {
     private Bitmap referencePicture = null;
     private String objectName = null;
 
+    //Constructor
     public ScanObject(Bitmap referencePicture, String objectName)
     {
         this.referencePicture = referencePicture;
         this.objectName = objectName;
     }
 
+    //Getter/Setter
     public Bitmap getReferencePicture() {
         return referencePicture;
     }

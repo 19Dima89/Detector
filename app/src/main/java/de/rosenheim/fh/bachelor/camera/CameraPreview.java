@@ -24,6 +24,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         this.mHolder.addCallback(this);
     }
 
+    //Will be executed when the camera preview is being instantiated
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
@@ -42,6 +43,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
+    //Will be executed every time the camera preview is recreated (for example if you change from landscape to portrait)
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 

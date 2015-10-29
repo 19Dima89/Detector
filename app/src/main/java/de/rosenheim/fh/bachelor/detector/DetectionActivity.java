@@ -82,7 +82,7 @@ public class DetectionActivity extends ActionBarActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Side loading the OpenCV Manager to integrate the OpenCV library
+        //Side loading the OpenCV Manager to integrate the OpenCV library (Needed to use the library)
         Log.i(TAG, "Trying to load OpenCV library");
 
         if (!OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, this, mOpenCVCallBack))
@@ -110,16 +110,19 @@ public class DetectionActivity extends ActionBarActivity{
 
     }
 
+    //Will be executed when the match_button is pressed
     public void matchAction(View view)
     {
         new MatcherThread(mPreview, mHandler, comparisonObjects).start();
     }
 
+    //Will be executed when the cam_button is pressed
     public void captureAction(View view)
     {
         new CaptureThread(mPreview, mHandler, comparisonObjects).start();
     }
 
+    //Will be executed every time the Mather Thread finishes
     private void handleMatcherThread(Message msg)
     {
         if(msg.obj==null)
@@ -139,6 +142,7 @@ public class DetectionActivity extends ActionBarActivity{
         detectionResult.setText(comparisonObjects.get(index).getObjectName());
     }
 
+    //Will be executed every time the Capture Thread finishes
     private void handleCaptureThread(Message msg)
     {
         if(msg.obj==null)
@@ -155,8 +159,7 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
-
-
+    //Instantiates the camera of the Android device
     private void setUpCamera()
     {
         try
@@ -203,6 +206,7 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
+    //Starts the camera on the current thread
     private void oldOpenCamera() {
         try
         {
@@ -259,6 +263,7 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
+    //Determines the optimal height and width of the CameraPreview
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
 
         final double ASPECT_TOLERANCE = 0.1;

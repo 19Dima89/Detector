@@ -1,11 +1,12 @@
-package de.rosenheim.fh.bachelor.detector;
+package de.rosenheim.fh.bachelor.threads;
 
-import android.graphics.Camera;
 import android.os.Handler;
 
 import java.util.List;
 
+import de.rosenheim.fh.bachelor.activities.DetectionActivity;
 import de.rosenheim.fh.bachelor.camera.CameraPreview;
+import de.rosenheim.fh.bachelor.detector.UtilityClass;
 import de.rosenheim.fh.bachelor.types.ScanObject;
 
 /**

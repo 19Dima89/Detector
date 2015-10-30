@@ -1,31 +1,31 @@
-package de.rosenheim.fh.bachelor.detector;
+package de.rosenheim.fh.bachelor.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
+
+import de.rosenheim.fh.bachelor.detector.R;
 
 /**
  * Created by infinity on 10/30/15.
  */
 public class SplashScreenActivity extends Activity {
 
-    /** Duration of wait **/
+    //Duration of the Splash-Screen
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
-    /** Called when the activity is first created. */
+    //Executed when the Activity is created
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.splash_screen_layout);
 
-        /* New Handler to start the Menu-Activity
-         * and close this Splash-Screen after some seconds.*/
+        //Handler to start DetectionActivity after the Splash-Screen
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
+                //This will launch the DetectionActivity
                 Intent mainIntent = new Intent(SplashScreenActivity.this, DetectionActivity.class);
                 SplashScreenActivity.this.startActivity(mainIntent);
                 SplashScreenActivity.this.finish();

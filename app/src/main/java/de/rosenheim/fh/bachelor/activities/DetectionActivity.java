@@ -1,4 +1,4 @@
-package de.rosenheim.fh.bachelor.detector;
+package de.rosenheim.fh.bachelor.activities;
 
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.rosenheim.fh.bachelor.camera.CameraPreview;
+import de.rosenheim.fh.bachelor.threads.CaptureThread;
+import de.rosenheim.fh.bachelor.threads.MatcherThread;
+import de.rosenheim.fh.bachelor.detector.R;
 import de.rosenheim.fh.bachelor.types.ScanObject;
 
 /**
@@ -108,6 +111,42 @@ public class DetectionActivity extends ActionBarActivity{
 
         setUpCamera();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mCamera == null)
+        {
+            // Restarting the camera preview and re-initiating mCamera
+            setUpCamera();
+            this.mPreview.setCamera(mCamera);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Releasing the camera so it can be properly used by other applications
+        freeCamera();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Releasing the camera so it can be properly used by other applications
+        freeCamera();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        // Releasing the camera so it can be properly used by other applications
+        freeCamera();
     }
 
     //Will be executed when the match_button is pressed

@@ -158,7 +158,7 @@ public class DetectionActivity extends ActionBarActivity{
     //Will be executed when the cam_button is pressed
     public void captureAction(View view)
     {
-        new CaptureThread(mPreview, mHandler, comparisonObjects).start();
+        new CaptureThread(mPreview, mHandler, this, comparisonObjects).start();
     }
 
     //Will be executed every time the Mather Thread finishes

@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ public class DetectionActivity extends ActionBarActivity{
     private CameraHandlerThread cameraThread = null;
     private RelativeLayout previewFrame = null;
     private TextView detectionResult = null;
+    private ImageButton matchButton = null, camButton = null;
     private List<ScanObject> comparisonObjects = null;
 
     //Needed to side load the OpenCV Manager on startup
@@ -105,6 +107,8 @@ public class DetectionActivity extends ActionBarActivity{
         //Getting the layout in which the camera preview will be stored
         previewFrame = (RelativeLayout) findViewById(R.id.preview_container);
         detectionResult = (TextView) findViewById(R.id.detection_result);
+        matchButton = (ImageButton) findViewById(R.id.match_button);
+        camButton = (ImageButton) findViewById(R.id.cam_button);
 
         //Initiating comparisonObjects
         comparisonObjects = new ArrayList<ScanObject>();
@@ -152,12 +156,14 @@ public class DetectionActivity extends ActionBarActivity{
     //Will be executed when the match_button is pressed
     public void matchAction(View view)
     {
+        disableButtons();
         new MatcherThread(mPreview, mHandler, comparisonObjects).start();
     }
 
     //Will be executed when the cam_button is pressed
     public void captureAction(View view)
     {
+        disableButtons();
         new CaptureThread(mPreview, mHandler, this, comparisonObjects).start();
     }
 
@@ -167,6 +173,7 @@ public class DetectionActivity extends ActionBarActivity{
         if(msg.obj==null)
         {
             detectionResult.setText("Nothing detected");
+            enableButtons();
             return;
         }
 
@@ -175,10 +182,12 @@ public class DetectionActivity extends ActionBarActivity{
         if(index == -1)
         {
             detectionResult.setText("Nothing detected");
+            enableButtons();
             return;
         }
 
         detectionResult.setText(comparisonObjects.get(index).getObjectName());
+        enableButtons();
     }
 
     //Will be executed every time the Capture Thread finishes
@@ -334,6 +343,18 @@ public class DetectionActivity extends ActionBarActivity{
             }
         }
         return optimalSize;
+    }
+
+    public void enableButtons()
+    {
+        this.matchButton.setEnabled(true);
+        this.camButton.setEnabled(true);
+    }
+
+    private void disableButtons()
+    {
+        this.matchButton.setEnabled(false);
+        this.camButton.setEnabled(false);
     }
 
     /*@Override

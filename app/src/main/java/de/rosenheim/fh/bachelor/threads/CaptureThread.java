@@ -64,6 +64,7 @@ public class CaptureThread extends Thread{
                     public void onClick(DialogInterface dialog, int which)
                     {
                         comparisonObjects.add(new ScanObject(fetchedFrame, input.getText().toString()));
+                        detectionActivity.enableButtons();
                     }
                 });
                 builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
@@ -71,6 +72,7 @@ public class CaptureThread extends Thread{
                     public void onClick(DialogInterface dialog, int which)
                     {
                         dialog.cancel();
+                        detectionActivity.enableButtons();
                     }
                 });
 

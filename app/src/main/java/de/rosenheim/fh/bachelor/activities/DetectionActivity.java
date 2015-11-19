@@ -31,21 +31,53 @@ import de.rosenheim.fh.bachelor.types.ScanObject;
  */
 public class DetectionActivity extends ActionBarActivity{
 
-    //Local variables
+    /**
+     * MatcherThread ID.
+     */
     public static final int MATCHER_THREAD = 30989;
+    /**
+     * CaptureThread ID.
+     */
     public static final int CAPTURE_THREAD = 98903;
+    /**
+     * Camera orientation.
+     */
     private final int PREVIEW_AND_PICTURE_ROTATION = 90;
+    /**
+     * Log tag.
+     */
     private final String TAG = "de.rosenheim.fh.tag";
+    /**
+     * Camera service object.
+     */
     private Camera mCamera = null;
+    /**
+     * Camera preview.
+     */
     private CameraPreview mPreview = null;
+    /**
+     * Background thread, on which the camera service object is opened.
+     */
     private CameraHandlerThread cameraThread = null;
+    /**
+     * Layout container which contains the camera preview.
+     */
     private RelativeLayout previewFrame = null;
+    /**
+     * Text label which displays if anything was detected or not.
+     */
     private TextView detectionResult = null;
+    /**
+     * Application buttons.
+     */
     private ImageButton matchButton = null, camButton = null;
+    /**
+     * List of all captured objects, which serve as the base for the matching operations.
+     */
     private List<ScanObject> comparisonObjects = null;
 
     /**
-     * Needed to side load the OpenCV Manager on startup
+     * Needed to side-load the OpenCV Manager on startup (required to use OpenCV Library on Android)
      */
     private BaseLoaderCallback mOpenCVCallBack = new BaseLoaderCallback(this) {
 
@@ -126,6 +158,9 @@ public class DetectionActivity extends ActionBarActivity{
 
     }
 
+    /**
+     *Gets called every time the application brought back from the background.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -138,6 +173,9 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
+    /**
+     * Gets called every time before the application is sent into the background.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -146,6 +184,9 @@ public class DetectionActivity extends ActionBarActivity{
         freeCamera();
     }
 
+    /**
+     * Gets called every time before the application is destroyed.
+     */
     @Override
     protected void onStop() {
         super.onStop();
@@ -154,6 +195,9 @@ public class DetectionActivity extends ActionBarActivity{
         freeCamera();
     }
 
+    /**
+     * Gets called when the application is destroyed.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -162,21 +206,33 @@ public class DetectionActivity extends ActionBarActivity{
         freeCamera();
     }
 
-    //Will be executed when the match_button is pressed
+    /**
+     * Will be executed when the match_button is pressed
+     *
+     * @param view      view, which called this method.
+     */
     public void matchAction(View view)
     {
         disableButtons();
         new MatcherThread(mPreview, mHandler, comparisonObjects).start();
     }
 
-    //Will be executed when the cam_button is pressed
+    /**
+     * Will be executed when the cam_button is pressed
+     *
+     * @param view      view, which called this method.
+     */
     public void captureAction(View view)
     {
         disableButtons();
         new CaptureThread(mPreview, mHandler, this, comparisonObjects).start();
     }
 
-    //Will be executed every time the Mather Thread finishes
+    /**
+     * Handles messages from the MatherThread.
+     *
+     * @param msg       data sent from the MatcherThread (can be anything).
+     */
     private void handleMatcherThread(Message msg)
     {
         if(msg.obj==null)
@@ -199,7 +255,11 @@ public class DetectionActivity extends ActionBarActivity{
         enableButtons();
     }
 
-    //Will be executed every time the Capture Thread finishes
+    /**
+     * Handles messages from the CaptureThread.
+     *
+     * @param msg       data sent from the CaptureThread (can be anything).
+     */
     private void handleCaptureThread(Message msg)
     {
         if(msg.obj==null)
@@ -216,7 +276,9 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
-    //Instantiates the camera of the Android device
+    /**
+     * Opens and configures the camera of the android device.
+     */
     private void setUpCamera()
     {
         try
@@ -252,7 +314,9 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
-    //Starts a new thread and opens the camera on that thread
+    /**
+     * Starts a new thread, to open the camera on that thread instead of the main thread.
+     */
     private void newOpenCamera() {
         if (cameraThread == null) {
             cameraThread = new CameraHandlerThread();
@@ -263,7 +327,9 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
-    //Starts the camera on the current thread
+    /**
+     * Opens the camera on the current thread
+     */
     private void oldOpenCamera() {
         try
         {
@@ -274,7 +340,9 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
-    //Opens the camera of the smart-phone in a separate thread, so that onPreviewFrame gets called on a non UI-thread
+    /**
+     * Background thread on which the camera can be opened, so that onPreviewFrame gets called on a non UI-thread.
+     */
     private class CameraHandlerThread extends HandlerThread {
         Handler mHandler = null;
 
@@ -310,7 +378,9 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
-    // This method will stop the camera preview and release the camera object
+    /**
+     * Stops and frees the camera object and its preview.
+     */
     private void freeCamera() {
         if (mCamera != null) {
             mCamera.setPreviewCallback(null);
@@ -320,7 +390,14 @@ public class DetectionActivity extends ActionBarActivity{
         }
     }
 
-    //Determines the optimal height and width of the CameraPreview
+    /**
+     * Determines optimal dimensions of the CameraPreview.
+     *
+     * @param sizes         list of all available dimensions on this android device.
+     * @param w             width of the preview container.
+     * @param h             height of the preview container.
+     * @return  Camera.Size optimal camera dimensions.
+     */
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
 
         final double ASPECT_TOLERANCE = 0.1;
@@ -354,12 +431,18 @@ public class DetectionActivity extends ActionBarActivity{
         return optimalSize;
     }
 
+    /**
+     * Enables all Buttons of the application.
+     */
     public void enableButtons()
     {
         this.matchButton.setEnabled(true);
         this.camButton.setEnabled(true);
     }
 
+    /**
+     * Disables all Buttons of the application.
+     */
     private void disableButtons()
     {
         this.matchButton.setEnabled(false);

@@ -23,14 +23,34 @@ import de.rosenheim.fh.bachelor.types.ScanObject;
  */
 public class MatcherThread extends Thread {
 
-    //Local variables
+    /**
+     * Defines how much matching keypoints need to be found for a positive result.
+     */
     private final int DETECTION_THRESHOLD = 50;
+    /**
+     * The camera preview.
+     */
     private CameraPreview preview = null;
+    /**
+     * The handler instance to the main thread.
+     */
     private Handler mHandler = null;
+    /**
+     * A list of all the present reference pictures.
+     */
     private List<ScanObject> comparisonObjects = null;
+    /**
+     * The frame that needs to get matched.
+     */
     private Bitmap fetchedFrame = null;
 
-    //Constructor
+    /**
+     * Instantiates a new MatcherThread instance.
+     *
+     * @param preview               camera preview.
+     * @param mHandler              handler to communicate with the main thread.
+     * @param comparisonObjects     list of all reference pictures.
+     */
     public MatcherThread(CameraPreview preview, Handler mHandler, List<ScanObject> comparisonObjects)
     {
         this.preview = preview;
@@ -38,7 +58,10 @@ public class MatcherThread extends Thread {
         this.comparisonObjects = comparisonObjects;
     }
 
-    //Gets a frame from the CameraPreview and compares the frame to all the saved frames in comparisonObjects
+    /**
+     * Logic of the thread (Gets a frame from the CameraPreview matches it with the help of
+     * detectShape and informs the main thread if anything is found.)
+     */
     public void run()
     {
         fetchedFrame = UtilityClass.fetchRawFrameData(this.preview.getRawPreviewData(), this.preview.getCamera().getParameters().getPreviewSize());
@@ -46,7 +69,13 @@ public class MatcherThread extends Thread {
         mHandler.sendMessage(mHandler.obtainMessage(DetectionActivity.MATCHER_THREAD, detectShape(fetchedFrame)));
     }
 
-    //Returns a positive integer if a valid shape is detected ( can be used as an index of comparisonObjects ), or -1 if no shape was detected
+    /**
+     * Compares a frame with all the saved frames in comparisonObjects.
+     *
+     * @param targetBitmap          Bitmap which needs to get matched.
+     * @return  int                 Returns a positive integer if a valid shape is detected ( can be used as an index of
+     *                              comparisonObjects ), or -1 if no shape was detected.
+     */
     private int detectShape(Bitmap targetBitmap)
     {
         if(targetBitmap != null)

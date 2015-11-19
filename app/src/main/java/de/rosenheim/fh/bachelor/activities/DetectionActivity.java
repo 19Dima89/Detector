@@ -44,7 +44,9 @@ public class DetectionActivity extends ActionBarActivity{
     private ImageButton matchButton = null, camButton = null;
     private List<ScanObject> comparisonObjects = null;
 
-    //Needed to side load the OpenCV Manager on startup
+    /**
+     * Needed to side load the OpenCV Manager on startup
+     */
     private BaseLoaderCallback mOpenCVCallBack = new BaseLoaderCallback(this) {
 
         @Override
@@ -64,7 +66,9 @@ public class DetectionActivity extends ActionBarActivity{
         }
     };
 
-    //Handles transactions with the various side threads
+    /**
+     * Handles transactions with the various side threads
+     */
     private Handler mHandler = new Handler() {
 
         @Override
@@ -83,6 +87,11 @@ public class DetectionActivity extends ActionBarActivity{
         }
     };
 
+    /**
+     * Gets called every time the Activity is created.
+     *
+     * @param savedInstanceState        bundle which holds saved data.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

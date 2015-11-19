@@ -22,16 +22,27 @@ import android.os.Environment;
  */
 public final class UtilityClass {
 
-    //Local variables
+    /**
+     * Max distance matches can have.
+     */
     private static final int DIST_LIMIT = 30;
 
-    //Constructor
+    /**
+     * Private constructor so that the class can not be instantiated
+     */
     private UtilityClass()
     {
-        //Private constructor so that the class can not be instantiated
+
     }
 
-    //Converts raw picture data which we get from the onPreviewFrame method in CameraPreview into Bitmaps
+    /**
+     * Converts raw picture data which we get from the onPreviewFrame method in CameraPreview
+     * into a Bitmap object
+     *
+     * @param rawData           raw preview frame byte array.
+     * @param previewSize       dimensions of the preview frame.
+     * @return Bitmap           converted preview frame.
+     */
     public static Bitmap fetchRawFrameData(byte[] rawData, Size previewSize)
     {
         if(rawData != null && previewSize != null)
@@ -57,7 +68,12 @@ public final class UtilityClass {
 
     }
 
-    //Filters matches according to a certain distance limit
+    /**
+     * Filters matches according to a certain distance limit
+     *
+     * @param matches       unfiltered matches.
+     * @return MatOfDMatch  filtered matches.
+     */
     public static MatOfDMatch filterMatchesByDistance(MatOfDMatch matches)
     {
         List<org.opencv.features2d.DMatch> matches_original = matches.toList();
@@ -77,7 +93,12 @@ public final class UtilityClass {
         return mat;
     }
 
-    //Saves the taken pictures to the download archive of the smart-phone
+    /**
+     * Saves a Bitmap with a certain name onto the internal storage of the android device.
+     *
+     * @param bitmapImage       Bitmap which gets saved.
+     * @param name              name of the Bitmap which gets saved.
+     */
     public static void saveToInternalStorage(Bitmap bitmapImage, String name)
     {
 

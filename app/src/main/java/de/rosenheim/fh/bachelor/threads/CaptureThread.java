@@ -19,14 +19,35 @@ import de.rosenheim.fh.bachelor.types.ScanObject;
  */
 public class CaptureThread extends Thread{
 
-    //Local variable
+    /**
+     * The camera preview.
+     */
     private CameraPreview preview = null;
+    /**
+     * The handler instance to the main thread.
+     */
     private Handler mHandler = null;
+    /**
+     * The main activity of the application.
+     */
     private DetectionActivity detectionActivity = null;
+    /**
+     * A list of all the present reference pictures.
+     */
     private List<ScanObject> comparisonObjects = null;
+    /**
+     * The taken frame.
+     */
     private Bitmap fetchedFrame = null;
 
-    //Constructor
+    /**
+     * Instantiates a new CaptureThread instance
+     *
+     * @param preview               Camera preview.
+     * @param mHandler              Handler to communicate with the main thread.
+     * @param detectionActivity     MainActivity of the application.
+     * @param comparisonObjects     List of all reference pictures.
+     */
     public CaptureThread(CameraPreview preview, Handler mHandler, DetectionActivity detectionActivity, List<ScanObject> comparisonObjects)
     {
         this.preview = preview;
@@ -35,7 +56,9 @@ public class CaptureThread extends Thread{
         this.comparisonObjects = comparisonObjects;
     }
 
-    //Receiving a Frame from the camera and saving it in comparisonObjects
+    /**
+     * Logic of the thread (capturing a picture and saving it, along with a name, in comparisonObjects)
+     */
     @Override
     public void run()
     {

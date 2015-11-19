@@ -11,12 +11,25 @@ import android.view.SurfaceView;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Camera.PreviewCallback{
 
 
-    //Local variables
+    /**
+     * The Camera service object.
+     */
     private Camera mCamera = null;
+    /**
+     * The SurfaceHolder of the camera preview.
+     */
     private SurfaceHolder mHolder = null;
+    /**
+     * The raw preview frame
+     */
     private byte[] rawPreviewData = null;
 
-    //Constructor
+    /**
+     * Instantiates a new CameraPreview Object.
+     *
+     * @param context       Context of the application.
+     * @param camera        the Camera service object.
+     */
     public CameraPreview(Context context, Camera camera) {
         super(context);
         this.mCamera = camera;
@@ -24,7 +37,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         this.mHolder.addCallback(this);
     }
 
-    //Will be executed when the camera preview is being instantiated
+    /**
+     * Handles the initial creation of the CameraPreview surface.
+     *
+     * @param holder        The SurfaceHolder whose surface has changed.
+     */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
@@ -43,7 +60,15 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    //Will be executed every time the camera preview is recreated (for example if you change from landscape to portrait)
+    /**
+     * Handles the recreation of the camera preview surface (in case app gets closed and reopened or
+     * the android device changes from landscape to portrait or vice versa)
+     *
+     * @param holder        The SurfaceHolder whose surface has changed.
+     * @param format        The new PixelFormat of the surface.
+     * @param width         The new width of the surface.
+     * @param height        The new height of the surface.
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
@@ -68,6 +93,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
+    /**
+     * Handles the destruction of the camera preview surface.
+     *
+     * @param holder        The SurfaceHolder whose surface has changed.
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
@@ -75,7 +105,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    //Gets a single frame from the camera
+    /**
+     * Gets a single frame from the camera
+     *
+     * @param data          the contents of the preview frame in the format of an byte array.
+     * @param camera        the Camera service object.
+     */
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
 
@@ -83,7 +118,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    //Focuses the camera continuously
+    /**
+     * Manually focuses the Camera service object.
+     */
     public void setFocusMode()
     {
         Camera.Parameters parameters = this.mCamera.getParameters();
@@ -91,17 +128,31 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         this.mCamera.setParameters(parameters);
     }
 
-    //Getters/Setters
+    /**
+     * Gets the saved preview frame of onPreviewFrame
+     *
+     * @return byte[]   preview frame.
+     */
     public byte[] getRawPreviewData()
     {
         return this.rawPreviewData;
     }
 
+    /**
+     * Gets Camera service object.
+     *
+     * @return Camera   Camera service object.
+     */
     public Camera getCamera()
     {
         return this.mCamera;
     }
 
+    /**
+     * Sets Camera service object.
+     *
+     * @param camera    Camera service object.
+     */
     public void setCamera(Camera camera)
     {
         this.mCamera = camera;

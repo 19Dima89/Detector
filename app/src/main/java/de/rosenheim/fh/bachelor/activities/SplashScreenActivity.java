@@ -12,10 +12,16 @@ import de.rosenheim.fh.bachelor.detector.R;
  */
 public class SplashScreenActivity extends Activity {
 
-    //Duration of the Splash-Screen
+    /**
+     * Duration of the Splash-Screen
+     */
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
-    //Executed when the Activity is created
+    /**
+     * Method wich gets called when the Activity is created (contains Splash-Screen logic)
+     *
+     * @param bundle    Saved data, in case data needs to get transferred to the Activity.
+     */
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);

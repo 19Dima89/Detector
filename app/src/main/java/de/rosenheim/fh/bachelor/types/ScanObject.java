@@ -7,22 +7,41 @@ import android.graphics.Bitmap;
  */
 public class ScanObject {
 
-    //Local variables
+    /**
+     * The reference picture.
+     */
     private Bitmap referencePicture = null;
+    /**
+     * The name of the reference picture.
+     */
     private String objectName = null;
 
-    //Constructor
+    /**
+     * Instantiates a new ScanObject instance.
+     *
+     * @param referencePicture      taken picture.
+     * @param objectName            name of the taken picture.
+     */
     public ScanObject(Bitmap referencePicture, String objectName)
     {
         this.referencePicture = referencePicture;
         this.objectName = objectName;
     }
 
-    //Getter/Setter
+    /**
+     * Gets the reference picture.
+     *
+     * @return Bitmap   the reference picture.
+     */
     public Bitmap getReferencePicture() {
         return referencePicture;
     }
 
+    /**
+     * Gets the name of the reference picture.
+     *
+     * @return String   the name of the reference picture.
+     */
     public String getObjectName() {
         return objectName;
     }

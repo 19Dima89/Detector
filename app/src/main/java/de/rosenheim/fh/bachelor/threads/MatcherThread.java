@@ -1,6 +1,7 @@
 package de.rosenheim.fh.bachelor.threads;
 
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.os.Handler;
 
 import org.opencv.android.Utils;
@@ -10,7 +11,11 @@ import org.opencv.core.MatOfKeyPoint;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
+import org.opencv.features2d.Features2d;
+import org.opencv.highgui.Highgui;
+import org.opencv.imgproc.Imgproc;
 
+import java.io.File;
 import java.util.List;
 
 import de.rosenheim.fh.bachelor.activities.DetectionActivity;
@@ -93,6 +98,7 @@ public class MatcherThread extends Thread {
             MatOfDMatch matches = new MatOfDMatch();
             Mat capturedImage = new Mat();
             Utils.bitmapToMat(targetBitmap, capturedImage);
+            Imgproc.cvtColor(capturedImage, capturedImage, Imgproc.COLOR_RGBA2GRAY);
             Mat descriptorsCapturedImage = new Mat();
             MatOfKeyPoint keypointsCapturedImage = new MatOfKeyPoint();
 
@@ -100,13 +106,17 @@ public class MatcherThread extends Thread {
             detector.detect(capturedImage, keypointsCapturedImage);
             descriptor.compute(capturedImage, keypointsCapturedImage, descriptorsCapturedImage);
 
+            //Preperation to get the keypoints of the coparison Images
+            Mat compareImage = new Mat();
+            Mat descriptorsCompareImage = new Mat();
+            MatOfKeyPoint keypointsCompareImage = new MatOfKeyPoint();
+            String nameComparisonObject = null;
+
             //Matching the keypoints of the captured Image with the keypoints of the ScanObjects in comparisonObjects
             for(int i=0;i < comparisonObjects.size(); i++)
             {
-                Mat compareImage = new Mat();
                 Utils.bitmapToMat(comparisonObjects.get(i).getReferencePicture(), compareImage);
-                Mat descriptorsCompareImage = new Mat();
-                MatOfKeyPoint keypointsCompareImage = new MatOfKeyPoint();
+                Imgproc.cvtColor(compareImage, compareImage, Imgproc.COLOR_RGBA2GRAY);
 
                 detector.detect(compareImage, keypointsCompareImage);
                 descriptor.compute(compareImage, keypointsCompareImage, descriptorsCompareImage);
@@ -117,10 +127,15 @@ public class MatcherThread extends Thread {
 
                 if(filteredMatches > highestMatchCount)
                 {
+                    nameComparisonObject = comparisonObjects.get(i).getObjectName();
                     highestMatchCount = filteredMatches;
                     highestMatchCountIndex = i;
                 }
             }
+
+            //UtilityClass.drawMatchesAndSaveThem(capturedImage, keypointsCapturedImage, compareImage, keypointsCompareImage, matches, nameComparisonObject);
+            UtilityClass.drawMatchesAndSaveThem(capturedImage, keypointsCapturedImage, compareImage, keypointsCompareImage, UtilityClass.filterMatchesByDistance(matches), nameComparisonObject);
+            //UtilityClass.drawKeypointsAndSaveThem(capturedImage, keypointsCapturedImage, nameComparisonObject);
 
             //If highestMatchCount is larger then DETECTION_THRESHOLD, a valid match has been found
             if(highestMatchCount > DETECTION_THRESHOLD)

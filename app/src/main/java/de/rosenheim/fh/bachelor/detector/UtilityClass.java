@@ -6,7 +6,14 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfDMatch;
+import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.Scalar;
+import org.opencv.features2d.Features2d;
+import org.opencv.highgui.Highgui;
+import org.opencv.imgproc.Imgproc;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -118,4 +125,30 @@ public final class UtilityClass {
             e.printStackTrace();
         }
     }
+
+    public static void drawMatchesAndSaveThem(Mat matCapturedImage, MatOfKeyPoint keypointsCapturedImage,
+                                              Mat matComparisonImage, MatOfKeyPoint keypointsComparisonImage,
+                                              MatOfDMatch matches, String nameComparisonObject)
+    {
+        Mat outputImage = matCapturedImage.clone();
+
+        //Features2d.drawMatches(matCapturedImage, keypointsCapturedImage, matComparisonImage, keypointsComparisonImage, matches, outputImage, new Scalar(0,255,0), new Scalar(0,0,255), new MatOfByte(), 0);
+        Features2d.drawMatches(matCapturedImage, keypointsCapturedImage, matComparisonImage, keypointsComparisonImage, matches, outputImage);
+
+        File mypath=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/OpenCVPics", nameComparisonObject + "_matches.jpeg");
+
+        Highgui.imwrite(mypath.toString(), outputImage);
+    }
+
+    public static void drawKeypointsAndSaveThem(Mat matCapturedImage, MatOfKeyPoint keypointsCapturedImage, String nameComparisonObject)
+    {
+        Mat outputImage = matCapturedImage.clone();
+
+        Features2d.drawKeypoints(matCapturedImage, keypointsCapturedImage, outputImage, new Scalar(0,0,255),0);
+
+        File mypath=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/OpenCVPics", nameComparisonObject + "_keypoints.jpeg");
+
+        Highgui.imwrite(mypath.toString(), outputImage);
+    }
+
 }

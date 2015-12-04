@@ -8,6 +8,8 @@ import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -30,6 +32,10 @@ import de.rosenheim.fh.bachelor.types.ScanObject;
  * Created by Dima-Desktop on 25.10.2015
  */
 public class DetectionActivity extends ActionBarActivity{
+
+    public static final int ALG_ORB = 3456;
+
+    public static final int ALG_FAST = 3465;
 
     /**
      * MatcherThread ID.
@@ -75,6 +81,8 @@ public class DetectionActivity extends ActionBarActivity{
      * List of all captured objects, which serve as the base for the matching operations.
      */
     private List<ScanObject> comparisonObjects = null;
+
+    private MenuItem matchesItem = null, filteredMatchesItem = null, keypointsItem = null;
 
     /**
      * Needed to side-load the OpenCV Manager on startup (required to use OpenCV Library on Android)
@@ -214,7 +222,8 @@ public class DetectionActivity extends ActionBarActivity{
     public void matchAction(View view)
     {
         disableButtons();
-        new MatcherThread(mPreview, mHandler, comparisonObjects).start();
+        new MatcherThread(mPreview, mHandler, comparisonObjects, matchesItem.isChecked(),
+                          filteredMatchesItem.isChecked(), keypointsItem.isChecked()).start();
     }
 
     /**
@@ -449,10 +458,13 @@ public class DetectionActivity extends ActionBarActivity{
         this.camButton.setEnabled(false);
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        matchesItem = menu.findItem(R.id.menu_matches);
+        filteredMatchesItem = menu.findItem(R.id.menu_filtered_matches);
+        keypointsItem = menu.findItem(R.id.menu_keypoints);
         return true;
     }
 
@@ -461,13 +473,40 @@ public class DetectionActivity extends ActionBarActivity{
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId())
+        {
+            case R.id.menu_matches:
+                if(matchesItem.isChecked())
+                {
+                    matchesItem.setChecked(false);
+                }
+                else
+                {
+                    matchesItem.setChecked(true);
+                }
+                return true;
+            case R.id.menu_filtered_matches:
+                if(filteredMatchesItem.isChecked())
+                {
+                    filteredMatchesItem.setChecked(false);
+                }
+                else
+                {
+                    filteredMatchesItem.setChecked(true);
+                }
+                return true;
+            case R.id.menu_keypoints:
+                if(keypointsItem.isChecked())
+                {
+                    keypointsItem.setChecked(false);
+                }
+                else
+                {
+                    keypointsItem.setChecked(true);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
-    }*/
+    }
 }

@@ -16,12 +16,12 @@
         <activity
             android:name="de.rosenheim.fh.bachelor.activities.DetectionActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat">
         </activity>
         <activity
             android:name="de.rosenheim.fh.bachelor.activities.SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

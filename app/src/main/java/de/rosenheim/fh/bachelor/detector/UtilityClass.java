@@ -128,14 +128,24 @@ public final class UtilityClass {
 
     public static void drawMatchesAndSaveThem(Mat matCapturedImage, MatOfKeyPoint keypointsCapturedImage,
                                               Mat matComparisonImage, MatOfKeyPoint keypointsComparisonImage,
-                                              MatOfDMatch matches, String nameComparisonObject)
+                                              MatOfDMatch matches, String nameComparisonObject, boolean filteredFlag)
     {
         Mat outputImage = matCapturedImage.clone();
 
         //Features2d.drawMatches(matCapturedImage, keypointsCapturedImage, matComparisonImage, keypointsComparisonImage, matches, outputImage, new Scalar(0,255,0), new Scalar(0,0,255), new MatOfByte(), 0);
         Features2d.drawMatches(matCapturedImage, keypointsCapturedImage, matComparisonImage, keypointsComparisonImage, matches, outputImage);
 
-        File mypath=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/OpenCVPics", nameComparisonObject + "_matches.jpeg");
+        File mypath = null;
+
+        if(filteredFlag)
+        {
+            mypath=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/OpenCVPics", nameComparisonObject + "_filtered_matches.jpeg");
+        }
+        else
+        {
+            mypath=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/OpenCVPics", nameComparisonObject + "_matches.jpeg");
+        }
+
 
         Highgui.imwrite(mypath.toString(), outputImage);
     }

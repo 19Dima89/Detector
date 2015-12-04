@@ -49,6 +49,8 @@ public class MatcherThread extends Thread {
      */
     private Bitmap fetchedFrame = null;
 
+    private boolean drawMatchesFlag = false, drawFilteredMatchesFlag = false, drawKeypointsFlag = false;
+
     /**
      * Instantiates a new MatcherThread instance.
      *
@@ -56,11 +58,14 @@ public class MatcherThread extends Thread {
      * @param mHandler              handler to communicate with the main thread.
      * @param comparisonObjects     list of all reference pictures.
      */
-    public MatcherThread(CameraPreview preview, Handler mHandler, List<ScanObject> comparisonObjects)
+    public MatcherThread(CameraPreview preview, Handler mHandler, List<ScanObject> comparisonObjects, boolean drawMatchesFlag, boolean drawFilteredMatchesFlag, boolean drawKeypointsFlag)
     {
         this.preview = preview;
         this.mHandler = mHandler;
         this.comparisonObjects = comparisonObjects;
+        this.drawMatchesFlag = drawMatchesFlag;
+        this.drawFilteredMatchesFlag = drawFilteredMatchesFlag;
+        this.drawKeypointsFlag = drawKeypointsFlag;
     }
 
     /**
@@ -133,9 +138,20 @@ public class MatcherThread extends Thread {
                 }
             }
 
-            //UtilityClass.drawMatchesAndSaveThem(capturedImage, keypointsCapturedImage, compareImage, keypointsCompareImage, matches, nameComparisonObject);
-            UtilityClass.drawMatchesAndSaveThem(capturedImage, keypointsCapturedImage, compareImage, keypointsCompareImage, UtilityClass.filterMatchesByDistance(matches), nameComparisonObject);
-            //UtilityClass.drawKeypointsAndSaveThem(capturedImage, keypointsCapturedImage, nameComparisonObject);
+            if(drawMatchesFlag)
+            {
+                UtilityClass.drawMatchesAndSaveThem(capturedImage, keypointsCapturedImage, compareImage, keypointsCompareImage, matches, nameComparisonObject, false);
+            }
+
+            if(drawFilteredMatchesFlag)
+            {
+                UtilityClass.drawMatchesAndSaveThem(capturedImage, keypointsCapturedImage, compareImage, keypointsCompareImage, UtilityClass.filterMatchesByDistance(matches), nameComparisonObject, true);
+            }
+
+            if(drawKeypointsFlag)
+            {
+                UtilityClass.drawKeypointsAndSaveThem(capturedImage, keypointsCapturedImage, nameComparisonObject);
+            }
 
             //If highestMatchCount is larger then DETECTION_THRESHOLD, a valid match has been found
             if(highestMatchCount > DETECTION_THRESHOLD)
